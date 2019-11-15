@@ -47,6 +47,9 @@
 #  [*manage_group*]
 #  Whether to create a group for or rely on external code for that
 #
+#  [*deploy_unit_file*]
+#  Whether to create a unit file or not (default true)
+#
 #  [*service_ensure*]
 #  State ensured for the service (default 'running')
 #
@@ -79,9 +82,11 @@ define prometheus::daemon (
   Boolean $purge                       = true,
   String $options                      = '',
   String $init_style                   = $prometheus::init_style,
+  Boolean $deploy_unit_file            = true,
   String $service_ensure               = 'running',
   Boolean $service_enable              = true,
   Boolean $manage_service              = true,
+  Optional[String] $service_provider   = undef,
   Hash[String, Scalar] $env_vars       = {},
   Optional[String] $env_file_path      = $prometheus::env_file_path,
   Optional[String[1]] $extract_command = $prometheus::extract_command,
@@ -183,10 +188,12 @@ define prometheus::daemon (
       }
     }
     'systemd' : {
-      include 'systemd'
-      systemd::unit_file {"${name}.service":
-        content => template('prometheus/daemon.systemd.erb'),
-        notify  => $notify_service,
+      if $deploy_unit_file {
+        include 'systemd'
+        systemd::unit_file {"${name}.service":
+          content => template('prometheus/daemon.systemd.erb'),
+          notify  => $notify_service,
+        }
       }
     }
     # service_provider returns redhat on CentOS using sysv, https://tickets.puppetlabs.com/browse/PUP-5296
@@ -226,6 +233,9 @@ define prometheus::daemon (
         notify  => $notify_service,
       }
     }
+    'none' : {
+      # Deploy your own init file
+    }
     default : {
       fail("I don't know how to create an init script for style ${init_style}")
     }
@@ -249,6 +259,7 @@ define prometheus::daemon (
   $real_provider = $init_style ? {
     'sles'  => 'redhat',  # mimics puppet's default behaviour
     'sysv'  => 'redhat',  # all currently used cases for 'sysv' are redhat-compatible
+    'none'  => $service_provider,
     default => $init_style,
   }
 
