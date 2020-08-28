@@ -172,6 +172,17 @@ describe 'prometheus::daemon' do
                 )
               }
             end
+            context 'with defined unit_after' do
+              let(:params) do
+                parameters.merge(unit_after: ['foo.service', 'bar.service'])
+              end
+
+              it {
+                is_expected.to contain_systemd__unit_file('smurf_exporter.service').with_content(
+                  %r{After=basic.target network.target foo.service bar.service}
+                )
+              }
+            end
 
           elsif ['ubuntu-14.04-x86_64'].include?(os)
             # init_style = 'upstart'

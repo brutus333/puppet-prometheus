@@ -1,0 +1,29 @@
+<%- | String $bin_dir,
+      String $bin_name,
+      String $env_file_path,
+      String $group,
+      String $name,
+      String $options,
+      Array  $unit_after,
+      String $user
+| -%>
+# THIS FILE IS MANAGED BY PUPPET
+[Unit]
+Description=Prometheus <%= $name %>
+Wants=basic.target
+After=basic.target network.target<% if $unit_after { %> <%= $unit_after.join(' ') %><% } %>
+
+[Service]
+User=<%= $user %>
+Group=<%= $group %>
+EnvironmentFile=<%= $env_file_path %>/<%= $name%>
+ExecStart=<%= $bin_dir %>/<%= $bin_name %><% shell_split($options).each |$option| { %> \
+<%= $option -%>
+<% } %>
+
+ExecReload=/bin/kill -HUP $MAINPID
+KillMode=process
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
