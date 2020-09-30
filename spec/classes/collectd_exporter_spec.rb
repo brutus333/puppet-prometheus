@@ -19,7 +19,8 @@ describe 'prometheus::collectd_exporter' do
       context 'with params' do
         let :params do
           {
-            install_method: 'url'
+            install_method: 'url',
+            service_name: 'collectd_exporter'
           }
         end
 

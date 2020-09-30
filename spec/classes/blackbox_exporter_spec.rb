@@ -15,6 +15,7 @@ describe 'prometheus::blackbox_exporter' do
             os: 'linux',
             bin_dir: '/usr/local/bin',
             install_method: 'url',
+            service_name: 'blackbox_exporter',
             modules: {
               'http_2xx' => {
                 'prober' => 'http'

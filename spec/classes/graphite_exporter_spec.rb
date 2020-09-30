@@ -19,7 +19,8 @@ describe 'prometheus::graphite_exporter' do
       context 'with params' do
         let :params do
           {
-            install_method: 'url'
+            install_method: 'url',
+            service_name: 'graphite_exporter'
           }
         end
 

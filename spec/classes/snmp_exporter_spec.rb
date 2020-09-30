@@ -14,7 +14,8 @@ describe 'prometheus::snmp_exporter' do
             arch: 'amd64',
             os: 'linux',
             bin_dir: '/usr/local/bin',
-            install_method: 'url'
+            install_method: 'url',
+            service_name: 'snmp_exporter'
           }
         end
 

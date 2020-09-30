@@ -6,6 +6,11 @@ describe 'prometheus::bird_exporter' do
       let(:facts) do
         facts.merge(os_specific_facts(facts))
       end
+      let(:params) do
+        {
+          service_name: 'bird_exporter'
+        }
+      end
 
       context 'without parameters' do
         it { is_expected.to compile.with_all_deps }

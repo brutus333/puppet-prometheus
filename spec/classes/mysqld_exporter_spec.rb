@@ -16,7 +16,8 @@ describe 'prometheus::mysqld_exporter' do
       context 'with version >= 0.9.0' do
         let(:params) do
           {
-            version: '0.9.0'
+            version: '0.9.0',
+            service_name: 'mysqld_exporter'
           }
         end
 

@@ -16,7 +16,8 @@ describe 'prometheus::postgres_exporter' do
             bin_dir: '/usr/local/bin',
             install_method: 'url',
             postgres_user: 'username',
-            postgres_pass: 'password'
+            postgres_pass: 'password',
+            service_name: 'postgres_exporter'
           }
         end
 
