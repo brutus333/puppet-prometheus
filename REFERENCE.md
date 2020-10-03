@@ -397,6 +397,16 @@ Currently only implemented for systemd based service.
 
 Default value: ``undef``
 
+##### `timeout_stop`
+
+Data type: `Optional[String]`
+
+The timeout for stopping prometheus via systemd.
+Defaults to `undef`, but set to a time string to override your default OS limit of 1min 30s.
+Currently only implemented for systemd based service.
+
+Default value: ``undef``
+
 ##### `usershell`
 
 Data type: `Stdlib::Absolutepath`
@@ -7436,6 +7446,14 @@ Data type: `Optional[Integer]`
 
 
 Default value: `$prometheus::max_open_files`
+
+##### `timeout_stop`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `$prometheus::timeout_stop`
 
 ##### `usershell`
 

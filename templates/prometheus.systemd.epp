@@ -2,6 +2,7 @@
       String[1] $group,
       Array[String] $daemon_flags,
       Optional[Integer] $max_open_files,
+      Optional[String] $timeout_stop,
       Stdlib::Absolutepath $bin_dir,
 | -%>
 # THIS FILE IS MANAGED BY PUPPET
@@ -20,6 +21,9 @@ KillMode=process
 Restart=always
 <% if $max_open_files { -%>
 LimitNOFILE=<%= $max_open_files %>
+<% } -%>
+<% if $timeout_stop { -%>
+TimeoutStopSec=<%= $timeout_stop %>
 <% } -%>
 NoNewPrivileges=true
 ProtectHome=true

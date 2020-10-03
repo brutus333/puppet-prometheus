@@ -3,6 +3,7 @@ class prometheus::config {
   assert_private()
 
   $max_open_files = $prometheus::server::max_open_files
+  $timeout_stop = $prometheus::server::timeout_stop
 
   $prometheus_v2 = versioncmp($prometheus::server::version, '2.0.0') >= 0
 
@@ -184,6 +185,7 @@ class prometheus::config {
             'group'          => $prometheus::server::group,
             'daemon_flags'   => $daemon_flags,
             'max_open_files' => $max_open_files,
+            'timeout_stop'   => $timeout_stop,
             'bin_dir'        => $prometheus::server::bin_dir,
         }),
         notify  => $notify,

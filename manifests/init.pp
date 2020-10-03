@@ -102,6 +102,10 @@
 #  The maximum number of file descriptors for the prometheus server.
 #  Defaults to `undef`, but set to a large integer to override your default OS limit.
 #  Currently only implemented for systemd based service.
+# @param timeout_stop
+#  Timeout when stopping the prometheus service.
+#  Defaults to `undef`, but set to a time definition like `5min` to override your default OS limit.
+#  Currently only implemented for systemd based service.
 # @param usershell
 #  if requested, we create a user for prometheus or the exporters. The default
 #  shell is nologin. It can be overwritten to any valid path.
@@ -287,6 +291,7 @@ class prometheus (
   Optional[Array[Hash[String[1], Any]]] $collect_scrape_jobs                    = [],
   Optional[String[1]] $collect_tag                                              = undef,
   Optional[Integer] $max_open_files                                             = undef,
+  Optional[String] $timeout_stop                                                = undef,
   String[1] $configname                                                         = 'prometheus.yaml',
   Boolean $service_enable                                                       = true,
   Boolean $manage_service                                                       = true,

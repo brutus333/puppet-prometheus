@@ -148,6 +148,24 @@ describe 'prometheus' do
                 }
               end
             end
+            describe 'timeout_stop' do
+              context 'by default' do
+                it {
+                  content = catalogue.resource('systemd::unit_file', 'prometheus.service').send(:parameters)[:content]
+                  expect(content).not_to include('TimeoutStopSec')
+                }
+              end
+              context 'when set to 5min' do
+                let(:params) do
+                  parameters.merge('timeout_stop' => '5min')
+                end
+
+                it {
+                  content = catalogue.resource('systemd::unit_file', 'prometheus.service').send(:parameters)[:content]
+                  expect(content).to include('TimeoutStopSec=5min')
+                }
+              end
+            end
           elsif os == 'archlinux-5-x86_64'
 
             it { is_expected.not_to contain_systemd__unit_file('prometheus.service') }

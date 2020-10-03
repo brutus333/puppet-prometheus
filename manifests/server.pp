@@ -47,6 +47,7 @@ class prometheus::server (
   Optional[Array[Hash[String[1], Any]]] $collect_scrape_jobs                    = $prometheus::collect_scrape_jobs,
   Optional[String[1]] $collect_tag                                              = $prometheus::collect_tag,
   Optional[Integer] $max_open_files                                             = $prometheus::max_open_files,
+  Optional[String] $timeout_stop                                                = $prometheus::timeout_stop,
   Stdlib::Absolutepath $usershell                                               = $prometheus::usershell,
 ) inherits prometheus {
   if( versioncmp($version, '1.0.0') == -1 ) {
