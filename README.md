@@ -227,13 +227,13 @@ alerts:
 ### Monitored Nodes
 
 ```puppet
-include prometheus::node_exporter
+include prometheus::exporter::node
 ```
 
 or:
 
 ```puppet
-class { 'prometheus::node_exporter':
+class { 'prometheus::exporter::node':
   version            => '0.12.0',
   collectors_disable => ['loadavg', 'mdadm'],
   extra_options      => '--collector.ntp.server ntp1.orange.intra',

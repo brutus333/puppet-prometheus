@@ -5,10 +5,10 @@ prometheus::version: '2.10.0'
 prometheus::install_method: 'package'
 prometheus::bin_dir: '/usr/bin'
 prometheus::env_file_path: '/etc/default'
-prometheus::node_exporter::package_name: 'prometheus-node-exporter'
-prometheus::node_exporter::install_method: 'package'
-prometheus::node_exporter::bin_name: 'prometheus-node-exporter'
-prometheus::node_exporter::user: 'node_exporter'
-prometheus::node_exporter::group: 'node_exporter'
-prometheus::node_exporter::manage_user: false
-prometheus::node_exporter::manage_group: false
+prometheus::exporter::node::package_name: 'prometheus-node-exporter'
+prometheus::exporter::node::install_method: 'package'
+prometheus::exporter::node::bin_name: 'prometheus-node-exporter'
+prometheus::exporter::node::user: 'node_exporter'
+prometheus::exporter::node::group: 'node_exporter'
+prometheus::exporter::node::manage_user: false
+prometheus::exporter::node::manage_group: false
