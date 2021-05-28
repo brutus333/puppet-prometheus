@@ -96,7 +96,13 @@ define prometheus::daemon (
           before          => File["/opt/${name}-${version}.${os}-${arch}/${name}"],
         }
       } else {
-        archive { "/tmp/${name}-${version}.${download_extension}":
+        file { "/opt/${name}-${version}.${os}-${arch}":
+          ensure => directory,
+          owner  => $user,
+          group  => $group,
+          mode   => '0755',
+        }
+        -> archive { "/tmp/${name}-${version}.${download_extension}":
           ensure          => present,
           extract         => true,
           extract_path    => $extract_path,
@@ -106,6 +112,8 @@ define prometheus::daemon (
           cleanup         => true,
           before          => File[$archive_bin_path],
           extract_command => $extract_command,
+          user            => $user,
+          group           => $group,
         }
       }
       file { $archive_bin_path:

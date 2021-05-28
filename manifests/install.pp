@@ -16,7 +16,13 @@ class prometheus::install {
   }
   case $prometheus::server::install_method {
     'url': {
-      archive { "/tmp/prometheus-${prometheus::server::version}.${prometheus::server::download_extension}":
+      file { "/opt/prometheus-${prometheus::server::version}.${prometheus::server::os}-${prometheus::server::real_arch}":
+        ensure => 'directory',
+        owner  => $prometheus::server::user,
+        group  => $prometheus::server::group,
+        mode   => '0755',
+      }
+      -> archive { "/tmp/prometheus-${prometheus::server::version}.${prometheus::server::download_extension}":
         ensure          => present,
         extract         => true,
         extract_path    => '/opt',
@@ -25,6 +31,8 @@ class prometheus::install {
         creates         => "/opt/prometheus-${prometheus::server::version}.${prometheus::server::os}-${prometheus::server::real_arch}/prometheus",
         cleanup         => true,
         extract_command => $prometheus::extract_command,
+        user            => $prometheus::server::user,
+        group           => $prometheus::server::group,
       }
       -> file {
         "/opt/prometheus-${prometheus::server::version}.${prometheus::server::os}-${prometheus::server::real_arch}/prometheus":
