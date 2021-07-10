@@ -174,14 +174,25 @@ define prometheus::daemon (
     }
     'systemd': {
       include 'systemd'
+
+      # we need this only for Puppet < 6.1, which don't do daemon reload natively
+      # (see https://tickets.puppetlabs.com/browse/PUP-3483)
+      if $manage_service and versioncmp($facts['puppetversion'],'6.1.0') < 0 {
+        # we don't use systemd::systemctl::daemon_reload here
+        # as it creates a dependency cycle in some cases
+        # (see https://github.com/voxpupuli/puppet-prometheus/issues/434)
+        exec { "${name}_daemon_reload":
+          command     => '/bin/systemctl daemon-reload',
+          refreshonly => true,
+        }
+        $effective_notify = [$notify_service, Exec["${name}_daemon_reload"]]
+      } else {
+        $effective_notify = $notify_service
+      }
+
       systemd::unit_file { "${name}.service":
         content => template('prometheus/daemon.systemd.erb'),
-        notify  => $notify_service,
-      }
-      # Puppet 5 doesn't have https://tickets.puppetlabs.com/browse/PUP-3483
-      # and camptocamp/systemd only creates this relationship when managing the service
-      if $manage_service and versioncmp($facts['puppetversion'],'6.1.0') < 0 {
-        Class['systemd::systemctl::daemon_reload'] -> Service[$name]
+        notify  => $effective_notify,
       }
     }
     'sysv': {
